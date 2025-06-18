@@ -32,26 +32,107 @@
 
     </select>
 
+    <a href = '/add-book' class="btn addBook">Add Book</a>
     
   </section>
 
   <section class="books">
     <% books.map((book)=>{ %>
-        <div class="book">
-          <h3><%=book.title%></h3>
-          <h1>By <%=book.author%></h1>
+        <div class="book" id="<%=book._id%>">
+          <h1><%=book.title%></h1>
+          <h3>By <%=book.author%></h3>
           <p>Genre: <span><%=book.genre%></span></p>
           <p>Pages: <span><%=book.pagesRead%> / <%=book.totalPages%></span></p>
           <p>Rating: <span><%=book.rating%></span></p>
           <p>Remarks: <span><%=book.remarks%></span></p>
 
           <div class="actions">
-            <button class="btn">Update</button>
-            <button class="btn">Delete</button>
+            <button class="btn updateButton" book-id = "<%=book._id%>">Update</button>
+            <button class="btn deleteButton" book-id = "<%=book._id%>">Delete</button>
           </div>
         </div>
     <%})%>
   </section>
+
+  <script>
+    const bookSections = document.querySelectorAll(".book")
+
+    bookSections.forEach(bookInfo=>{
+        const bookId = bookInfo.getAttribute('id');
+        const bookName = bookInfo.querySelector('h1').textContent
+        const bookAuthor = bookInfo.querySelector('h3').textContent.replace('By ','')
+        console.log("Inside foreach Deleting Book: ", bookName, " By: ",bookAuthor," Id: ",bookId, " type of bookId",typeof(bookId))
+
+
+        const delbtn = bookInfo.querySelector(".deleteButton");
+
+        delbtn.addEventListener('click', async (e)=>{
+            e.preventDefault()
+            console.log("Deleting Book: ", bookName, " By: ",bookAuthor," Id: ",bookId, "typeof BookID",typeof(bookId))
+            try{
+              const res = await fetch(`/delete/${bookId}`,{
+                  method: 'DELETE',
+              })
+              const data = await res.json()
+              console.log("data after deleting: ",bookId,data);
+              window.location.reload()
+
+            }
+            catch(err){
+              console.log("Error in myLibrary.ejs line 81")
+              console.log(err.message)
+            }
+        })
+
+        const updtbtn = bookInfo.querySelector('.updateButton')
+        updtbtn.addEventListener('click',(e)=>location.assign(`/edit-book/${bookId}`))
+    
+    
+      })
+
+
+
+
+
+
+    // const form = document.querySelector('form')
+    // const email_error = document.querySelector('.email.error')
+    // const password_error = document.querySelector('.password.error')
+    // form.addEventListener('submit',async (e)=>{
+    //     e.preventDefault()
+    //     console.log()
+    //     const email = form.email.value
+    //     const password = form.password.value
+
+    //     email_error.textContent ='';
+    //     password_error.textContent ='';
+    //     try{
+    //         const res = await fetch('/signup', {
+    //             method: 'POST',
+    //             body: JSON.stringify({email,password}),
+    //             headers: {'Content-Type':'application/json'}
+    //         })
+    //         const data = await res.json()
+    //         console.log("data",data)
+    //         if(data.email || data.password){
+    //             console.log("Yes there are errors: ",data)
+    //             console.log("Email: ",data.email)
+    //             console.log("Password: ",data.password)
+    //             email_error.textContent = data.email
+    //             password_error.textContent = data.password
+                
+    //         }
+    //         if(data.user){
+    //             location.assign('/')
+    //         }
+    //     }
+    //     catch(err){
+    //         console.log(err)
+    //     }
+    // })
+
+
+  </script>
 
 
 

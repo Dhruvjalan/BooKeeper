@@ -2,17 +2,17 @@
 
 <section class="add-book">
   <form>
-    <h2>Add New Book for <%=user.id%> </h2>
+    <h2>Add New Book</h2>
 
     <label for="title">Book Title:</label>
-    <input type="text" id="title" name="title" placeholder="Enter book title" required>
+    <input type="text" id="title" name="title" value="Enter book title" required>
 
     <label for="author">Author:</label>
-    <input type="text" id="author" name="author" placeholder="Enter author name" required>
+    <input type="text" id="author" name="author" value="Enter author name" required>
 
     <label for="genre">Genre:</label>
     <select id="genre" name="genre" required>
-      <option value="">Select genre</option>
+      <!-- <option value="">Select genre</option> -->
       <option value="fiction">Fiction</option>
       <option value="non-fiction">Non-Fiction</option>
       <option value="sci-fi">Sci-Fi</option>
@@ -23,18 +23,18 @@
     </select>
 
     <label for="pagesRead">Pages Read:</label>
-    <input type="number" id="pagesRead" name="pagesRead" placeholder="0" min="0" required>
+    <input type="number" id="pagesRead" name="pagesRead" value="1" min="0"  required>
 
     <label for="totalPages">Total Pages:</label>
-    <input type="number" id="totalPages" name="totalPages" placeholder="Enter total pages" min="1" required>
+    <input type="number" id="totalPages" name="totalPages" value="1" min="1" required>
 
     <label for="totalPages">Rating (out of 5):</label>
-    <input type="number" id="rating" name="rating" placeholder="Enter Rating" min="0" >
+    <input type="number" id="rating" name="rating" value="1" min="0" >
 
     <label for="remarks">Remarks:</label>
-    <textarea id="remarks" name="remarks" rows="3" placeholder="Optional remarks"></textarea>
+    <textarea id="remarks" name="remarks" rows="3" value="Optionalremarks"></textarea>
 
-    <button type="submit">Add Book</button>
+    <a href="/myLibrary"><button type="submit">Add Book</button></a>
   </form>
 </section>
 
@@ -61,11 +61,13 @@
             const data = await res.json()
             console.log("data",data)
             
-            if(data.book){
-                location.assign('/')
+            if(data.bookid){
+                  window.location.href = '/myLibrary'
+
             }
         }
         catch(err){
+            console.log("Error found at views/addBook.ejs, line-69")
             console.log(err)
         }
     })

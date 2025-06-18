@@ -18,6 +18,7 @@
     const password_error = document.querySelector('.password.error')
     form.addEventListener('submit',async (e)=>{
         e.preventDefault()
+        console.log()
         const email = form.email.value
         const password = form.password.value
 
@@ -30,7 +31,7 @@
                 headers: {'Content-Type':'application/json'}
             })
             const data = await res.json()
-            console.log(data)
+            console.log("data",data)
             if(data.email || data.password){
                 console.log("Yes there are errors: ",data)
                 console.log("Email: ",data.email)

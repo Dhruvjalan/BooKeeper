@@ -1,0 +1,77 @@
+<%- include('partials/header'); -%>
+
+<section class="add-book">
+  <form>
+    <h2>Edit Book</h2>
+
+    <label for="title">Book Title:</label>
+    <input type="text" id="title" name="title" value="<%=book.title%>" required readonly />
+
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" value="<%=book.author%>" required readonly />
+
+    <label for="genre">Genre:</label>
+    <input id="genre" name="genre" value="<%=book.genre%>" required readonly />
+      
+
+    <label for="pagesRead">Pages Read:</label>
+    <input type="number" id="pagesRead" name="pagesRead" value="<%=book.pagesRead%>" min="0" step="1"  required>
+
+    <label for="totalPages">Total Pages:</label>
+    <input type="number" id="totalPages" name="totalPages" value="<%=book.totalPages%>" min="1" required readonly />
+
+    <label for="totalPages">Rating (out of 5):</label>
+    <input type="number" id="rating" name="rating" value="<%=book.rating%>" min="0" >
+
+    <label for="remarks">Remarks:</label>
+    <textarea id="remarks" name="remarks" rows="3" ><%=book.remarks%></textarea>
+
+    <button type="submit">Update Details</button>
+  </form>
+</section>
+
+<script>
+    const bookId = "<%=book._id%>"
+    const form = document.querySelector('form')
+    const userId = "<%= user.id %>"
+    form.addEventListener('submit',async (e)=>{
+        e.preventDefault()
+        console.log("After Add Book")
+        const title = form.title.value
+        const author = form.author.value
+        const genre = form.genre.value
+        const pagesRead = form.pagesRead.value
+        const totalPages = form.totalPages.value
+        const rating = form.rating.value
+        const remarks = form.remarks.value
+
+        try {
+  const res = await fetch(`/edit-book/${bookId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+        userId: "<%=user.id%>",
+      title,
+      author,
+      genre,
+      pagesRead,
+      totalPages,
+      completionStatus: pagesRead * 100 / totalPages,
+      rating,
+      remarks
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  const data = await res.json()
+  console.log("Updated book data:", data)
+
+  if (res.ok) {
+    window.location.href = '/myLibrary'
+  }
+} catch (err) {
+  console.error("Error in PATCH request:", err)
+}
+    })
+</script>
+
+<%- include('partials/footer'); -%>

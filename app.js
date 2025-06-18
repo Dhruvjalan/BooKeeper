@@ -4,7 +4,7 @@ import authRoutes from './routes/authRoutes.js'
 import appRoutes from './routes/appRoutes.js'
 import cookieParser from 'cookie-parser'
 import { requireAuth, checkUser } from './middleware/authMiddleware.js'
-
+import {get_this_book} from './middleware/appMiddleware.js'
 const app = express()
 
 app.use(express.static('public'))
@@ -23,8 +23,12 @@ mongoose.connect(dbURI, {})
 
 app.get('*',checkUser);
 app.get('/', (req, res) => res.render('home'))
-app.get('/smoothies', requireAuth, (req, res) => res.render('myLibrary'))
+app.get('/myLibrary', requireAuth, (req, res) => res.render('myLibrary'))
 app.get('/add-book', requireAuth, (req, res) => res.render('addBook'))
+app.get('/edit-book/:bookId', requireAuth, get_this_book, (req, res) => {
+  res.render('editBook')
+});
+app.get('/BookNotFound', requireAuth, (req, res) => res.render('bookNotFound'))
 
 app.use(authRoutes)
 app.use(appRoutes)
