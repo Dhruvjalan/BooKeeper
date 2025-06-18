@@ -15,13 +15,18 @@
       
 
     <label for="pagesRead">Pages Read:</label>
-    <input type="number" id="pagesRead" name="pagesRead" value="<%=book.pagesRead%>" min="0" step="1"  required>
+    <input type="number" id="pagesRead" name="pagesRead" value="<%=book.pagesRead%>" min="0" max="<%=book.totalPages%>" step="1" required>
+    <div class="pages-err error"></div>
+
 
     <label for="totalPages">Total Pages:</label>
     <input type="number" id="totalPages" name="totalPages" value="<%=book.totalPages%>" min="1" required readonly />
 
+
     <label for="totalPages">Rating (out of 5):</label>
-    <input type="number" id="rating" name="rating" value="<%=book.rating%>" min="0" >
+    <input type="number" id="rating" name="rating" value="<%=book.rating%>" min="0" max="5" >
+    <div class="rating error"></div>
+
 
     <label for="remarks">Remarks:</label>
     <textarea id="remarks" name="remarks" rows="3" ><%=book.remarks%></textarea>

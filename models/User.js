@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+const { ObjectId } = mongoose.Types
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 
@@ -47,6 +48,58 @@ userSchema.statics.login = async function (email, password) {
     throw Error('Incorrect Password')
   }
   throw Error('Looks like this email is not signed up with us. Sign in Now')
+}
+
+userSchema.statics.addBook = async function (userId, bookId, completion) {
+  const bookObjectId = new mongoose.Types.ObjectId(String(bookId))
+  const crosscheck_user = await this.findById(userId)
+  let user = crosscheck_user
+  if (!crosscheck_user.TotalBooks.some(id => id.equals(bookObjectId))){
+  
+    user = await this.findByIdAndUpdate(
+    userId,
+    { 
+      $push: {TotalBooks: bookObjectId }
+    },
+    { new: true }
+  )}
+
+  if(completion===1){ 
+    if(!crosscheck_user.CompletedBooks.some(id => id.equals(bookObjectId))){
+        user = await this.findByIdAndUpdate(
+        userId,
+        { 
+          $push: {CompletedBooks: bookObjectId }
+        },
+        { new: true }
+          )    
+    }
+  } else if (completion<1){
+    const user = await this.findByIdAndUpdate(
+      userId,
+      {
+      $pull: {CompletedBooks:bookObjectId}
+      },
+      {new:true}
+    )
+  }
+
+
+  return user
+  
+  
+  
+}
+
+userSchema.statics.removeBook = async function(userId,bookId) {
+  
+const bookObjectId = new mongoose.Types.ObjectId(String(bookId))
+
+  const user = await this.findByIdAndUpdate(userId,{
+    $pull: {TotalBooks: bookObjectId, CompletedBooks:bookObjectId}
+  },{new:true}
+)
+  return user
 }
 
 const User = mongoose.model('user', userSchema)

@@ -56,7 +56,7 @@
 
   <script>
     const bookSections = document.querySelectorAll(".book")
-
+    const userId = "<%=user.id%>"
     bookSections.forEach(bookInfo=>{
         const bookId = bookInfo.getAttribute('id');
         const bookName = bookInfo.querySelector('h1').textContent
@@ -70,7 +70,7 @@
             e.preventDefault()
             console.log("Deleting Book: ", bookName, " By: ",bookAuthor," Id: ",bookId, "typeof BookID",typeof(bookId))
             try{
-              const res = await fetch(`/delete/${bookId}`,{
+              const res = await fetch(`/delete/${userId}/${bookId}`,{
                   method: 'DELETE',
               })
               const data = await res.json()
