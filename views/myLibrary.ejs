@@ -18,19 +18,20 @@
       <option value="completed">Completed</option>
       <option value="in-progress">In Progress</option>
     </select>
+    
 
-        <label for="genre">Genre:</label>
-    <select id="genre" name="genre" required>
-      <option value="">Select genre</option>
-      <option value="fiction">Fiction</option>
-      <option value="non-fiction">Non-Fiction</option>
-      <option value="sci-fi">Sci-Fi</option>
-      <option value="fantasy">Fantasy</option>
-      <option value="history">History</option>
-      <option value="biography">Biography</option>
-      <option value="other">Other</option>
-
-    </select>
+    <label for="genreFilter">Genre:</label>
+      <select id="genreFilter" name="genre" required>
+      <option value="All">All</option>
+      <option value="Fiction">Fiction</option>
+      <option value="Non-Fiction">Non-Fiction</option>
+      <option value="Sci-Fi">Sci-Fi</option>
+      <option value="Fantasy">Fantasy</option>
+      <option value="History">History</option>
+      <option value="Biography">Biography</option>
+      <option value="Self-Improvement">Self-Improvement</option>
+      <option value="Other">Other</option>
+      </select>
 
     <a href = '/add-book' class="btn addBook">Add Book</a>
     
@@ -41,7 +42,7 @@
         <div class="book" id="<%=book._id%>">
           <h1><%=book.title%></h1>
           <h3>By <%=book.author%></h3>
-          <p>Genre: <span><%=book.genre%></span></p>
+          <p >Genre: <span id = 'bookGenre'><%=book.genre%></span></p>
           <p>Pages: <span><%=book.pagesRead%> / <%=book.totalPages%></span></p>
           <p>Rating: <span><%=book.rating%></span></p>
           <p>Remarks: <span><%=book.remarks%></span></p>
@@ -55,6 +56,54 @@
   </section>
 
   <script>
+    const userTotalBooks = "<%=user.TotalBooks%>".split(',')
+    const userCompletedBooks = "<%=user.CompletedBooks%>".split(',')
+
+    console.log("totalbooks: ",userTotalBooks, typeof(userTotalBooks))
+    const statusFilter = document.getElementById('statusFilter');
+    const genreFilter = document.getElementById('genreFilter')
+    const booksSection = document.querySelectorAll('.book')
+
+    statusFilter.addEventListener('change', (e)=>{
+      e.preventDefault()
+      const selectedStatus = statusFilter.value
+      booksSection.forEach(book=>{
+        const bookId = book.getAttribute('id')
+        if( (  selectedStatus == 'all' && userTotalBooks.some(id=> id===(bookId))  ) || 
+            (  selectedStatus == 'completed' && userTotalBooks.some(id=> id===(bookId)) && userCompletedBooks.some(id=> id===(bookId))  ) || 
+            (  selectedStatus == 'in-progress' && userTotalBooks.some(id=> id===(bookId)) && !userCompletedBooks.some(id=> id===(bookId))  ) ) {
+              book.style.display = 'block';
+        }
+        else{
+          book.style.display = 'none'
+        }
+      })
+    })
+
+
+    genreFilter.addEventListener('change',(e)=>{
+      e.preventDefault()
+      const Selectedgenre = genreFilter.value 
+      console.log("Gnre selected: ",Selectedgenre)
+
+      booksSection.forEach(book=>{
+       const bookGenre = book.querySelector('p #bookGenre').textContent
+
+        if(Selectedgenre === bookGenre|| Selectedgenre === "All"){
+          book.style.display = 'block'
+        }
+        else{
+          book.style.display = 'none'
+        }
+
+
+
+      })
+
+
+    })
+
+
     const bookSections = document.querySelectorAll(".book")
     const userId = "<%=user.id%>"
     bookSections.forEach(bookInfo=>{
