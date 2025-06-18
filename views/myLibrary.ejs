@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<%- include('partials/header'); -%>
+
+
+  <nav>
+    <h2>Books of <%=user.email%></h2>
+  </nav>
+
+  <header>
+    <h2>Total Books: <span id="totalBooks">0</span></h2>
+  </header>
+
+  <section class="filters">
+
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter">
+      <option value="all">All</option>
+      <option value="completed">Completed</option>
+      <option value="in-progress">In Progress</option>
+    </select>
+
+        <label for="genre">Genre:</label>
+    <select id="genre" name="genre" required>
+      <option value="">Select genre</option>
+      <option value="fiction">Fiction</option>
+      <option value="non-fiction">Non-Fiction</option>
+      <option value="sci-fi">Sci-Fi</option>
+      <option value="fantasy">Fantasy</option>
+      <option value="history">History</option>
+      <option value="biography">Biography</option>
+      <option value="other">Other</option>
+
+    </select>
+
+    
+  </section>
+
+  <section class="books">
+    <% books.map((book)=>{ %>
+        <div class="book">
+          <h3><%=book.title%></h3>
+          <h1>By <%=book.author%></h1>
+          <p>Genre: <span><%=book.genre%></span></p>
+          <p>Pages: <span><%=book.pagesRead%> / <%=book.totalPages%></span></p>
+          <p>Rating: <span><%=book.rating%></span></p>
+          <p>Remarks: <span><%=book.remarks%></span></p>
+
+          <div class="actions">
+            <button class="btn">Update</button>
+            <button class="btn">Delete</button>
+          </div>
+        </div>
+    <%})%>
+  </section>
+
+
+
+<%- include('partials/footer'); -%>

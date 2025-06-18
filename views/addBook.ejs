@@ -1,0 +1,74 @@
+<%- include('partials/header'); -%>
+
+<section class="add-book">
+  <form>
+    <h2>Add New Book for <%=user.id%> </h2>
+
+    <label for="title">Book Title:</label>
+    <input type="text" id="title" name="title" placeholder="Enter book title" required>
+
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" placeholder="Enter author name" required>
+
+    <label for="genre">Genre:</label>
+    <select id="genre" name="genre" required>
+      <option value="">Select genre</option>
+      <option value="fiction">Fiction</option>
+      <option value="non-fiction">Non-Fiction</option>
+      <option value="sci-fi">Sci-Fi</option>
+      <option value="fantasy">Fantasy</option>
+      <option value="history">History</option>
+      <option value="biography">Biography</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label for="pagesRead">Pages Read:</label>
+    <input type="number" id="pagesRead" name="pagesRead" placeholder="0" min="0" required>
+
+    <label for="totalPages">Total Pages:</label>
+    <input type="number" id="totalPages" name="totalPages" placeholder="Enter total pages" min="1" required>
+
+    <label for="totalPages">Rating (out of 5):</label>
+    <input type="number" id="rating" name="rating" placeholder="Enter Rating" min="0" >
+
+    <label for="remarks">Remarks:</label>
+    <textarea id="remarks" name="remarks" rows="3" placeholder="Optional remarks"></textarea>
+
+    <button type="submit">Add Book</button>
+  </form>
+</section>
+
+<script>
+    const form = document.querySelector('form')
+    const userId = "<%= user.id %>"
+    form.addEventListener('submit',async (e)=>{
+        e.preventDefault()
+        console.log("After Add Book")
+        const title = form.title.value
+        const author = form.author.value
+        const genre = form.genre.value
+        const pagesRead = form.pagesRead.value
+        const totalPages = form.totalPages.value
+        const rating = form.rating.value
+        const remarks = form.remarks.value
+
+        try{
+            const res = await fetch('/add-book', {
+                method: 'POST',
+                body: JSON.stringify({userId, title,author,genre,completionStatus: pagesRead*100/totalPages,pagesRead,totalPages, rating,remarks}),
+                headers: {'Content-Type':'application/json'}
+            })
+            const data = await res.json()
+            console.log("data",data)
+            
+            if(data.book){
+                location.assign('/')
+            }
+        }
+        catch(err){
+            console.log(err)
+        }
+    })
+</script>
+
+<%- include('partials/footer'); -%>

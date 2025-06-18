@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
+import Book from '../models/Book.js'
 
 
 export const requireAuth = (req, res, next) => {
@@ -34,7 +35,14 @@ export const checkUser = (req,res,next) =>{
       } else {
         console.log(decodedToken)
         let user = await User.findById(decodedToken.id);
+        let books = await Book.getUserBooks(decodedToken.id)
         res.locals.user = user
+        if(books){
+          res.locals.books = books
+        }
+        else{
+          res.locals.books = []
+        }
         next()
       }
     })

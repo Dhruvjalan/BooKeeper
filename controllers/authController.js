@@ -71,3 +71,16 @@ export async function login_post(req, res) {
         res.status(400).json(errors)
     }
 }
+
+
+// export async function genre_get(req,res){
+//     const {userid} = req.body
+
+//     try{
+//         const user = await User.findById(id:)
+//     }
+//     catch(err){
+
+
+//     }
+// }

@@ -2,28 +2,28 @@ import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, 'Please provide your email'],
-    unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, 'Please enter a valid email']
-  },
-  password: {
-    type: String,
-    required: [true, 'Please provide your password'],
-    minlength: [6, 'Password should be atleast more than 6 characters long']
-  },
-  TotalBooks: {
-    type: Array,
-    required: true
-  },
-  CompletedBooks: {
-    type: Array,
-    required: true
-  }
-})
+  const userSchema = new mongoose.Schema({
+    email: {
+      type: String,
+      required: [true, 'Please provide your email'],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, 'Please enter a valid email']
+    },
+    password: {
+      type: String,
+      required: [true, 'Please provide your password'],
+      minlength: [6, 'Password should be atleast more than 6 characters long']
+    },
+    TotalBooks: {
+      type: Array,
+      required: true
+    },
+    CompletedBooks: {
+      type: Array,
+      required: true
+    }
+  })
 
 userSchema.post('save', function (doc, next) {
   console.log('New user was created')

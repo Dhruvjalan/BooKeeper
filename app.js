@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import authRoutes from './routes/authRoutes.js'
+import appRoutes from './routes/appRoutes.js'
 import cookieParser from 'cookie-parser'
 import { requireAuth, checkUser } from './middleware/authMiddleware.js'
 
@@ -22,9 +23,11 @@ mongoose.connect(dbURI, {})
 
 app.get('*',checkUser);
 app.get('/', (req, res) => res.render('home'))
-app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies'))
+app.get('/smoothies', requireAuth, (req, res) => res.render('myLibrary'))
+app.get('/add-book', requireAuth, (req, res) => res.render('addBook'))
 
 app.use(authRoutes)
+app.use(appRoutes)
 
 app.get('/set-cookies', (req, res) => {
   res.cookie('newUser', false, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true })
