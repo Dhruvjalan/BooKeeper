@@ -2,20 +2,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>BooKeeper - Track Your Reading</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <nav>
-    <h1><a href="/">BooKeeper</a></h1>
-    <ul>
-      <% if(user) {%>
-      <li>Welcome <%=user.email%></li>
-      <li><a href='/logout'>Logout</a></li>
-      <%}else{%>
-      <li><a href='/login'>Login</a></li>
-      <li><a href='/signup' class = 'btn'>Sign Up</a></li>
-      <%}%>
-    </ul>
-  </nav>
+  <header class="main-header">
+    <div class="container">
+      <nav class="main-nav">
+        <div class="nav-brand">
+          <h1><a href="/" class="logo">BooKeeper</a></h1>
+        </div>
+        
+        <ul class="nav-menu">
+          <% if(user) { %>
+            <li class="nav-item welcome-msg">Welcome, <span class="user-email"><%=user.email%></span></li>
+            <li class="nav-item"><a href='/logout' class="nav-link btn logout-btn">Logout</a></li>
+          <% } else { %>
+            <li class="nav-item"><a href='/login' class="nav-link">Login</a></li>
+            <li class="nav-item"><a href='/signup' class="nav-link btn signup-btn">Sign Up</a></li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  </header>
   

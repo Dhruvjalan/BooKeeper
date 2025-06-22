@@ -1,38 +1,55 @@
 <%- include('partials/header'); -%>
 
-<section class="add-book">
-  <form>
-    <h2>Edit Book</h2>
+<section class="edit-book">
+  <div class="container">
+    <form class="book-form">
+      <h2>Edit Book</h2>
 
-    <label for="title">Book Title:</label>
-    <input type="text" id="title" name="title" value="<%=book.title%>" required readonly />
+      <div class="form-group">
+        <label for="title">Book Title:</label>
+        <input type="text" id="title" name="title" value="<%=book.title%>" required readonly class="read-only">
+      </div>
 
-    <label for="author">Author:</label>
-    <input type="text" id="author" name="author" value="<%=book.author%>" required readonly />
+      <div class="form-group">
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" value="<%=book.author%>" required readonly class="read-only">
+      </div>
 
-    <label for="genre">Genre:</label>
-    <input id="genre" name="genre" value="<%=book.genre%>" required readonly />
-      
+      <div class="form-group">
+        <label for="genre">Genre:</label>
+        <input id="genre" name="genre" value="<%=book.genre%>" required readonly class="read-only">
+      </div>
 
-    <label for="pagesRead">Pages Read:</label>
-    <input type="number" id="pagesRead" name="pagesRead" value="<%=book.pagesRead%>" min="0" max="<%=book.totalPages%>" step="1" required>
-    <div class="pages-err error"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pagesRead">Pages Read:</label>
+          <input type="number" id="pagesRead" name="pagesRead" value="<%=book.pagesRead%>" min="0" max="<%=book.totalPages%>" step="1" required>
+          <div class="pages-err error"></div>
+        </div>
 
+        <div class="form-group">
+          <label for="totalPages">Total Pages:</label>
+          <input type="number" id="totalPages" name="totalPages" value="<%=book.totalPages%>" min="1" required readonly class="read-only">
+        </div>
+      </div>
 
-    <label for="totalPages">Total Pages:</label>
-    <input type="number" id="totalPages" name="totalPages" value="<%=book.totalPages%>" min="1" required readonly />
+      <div class="form-group">
+        <label for="rating">Rating (out of 5):</label>
+        <input type="number" id="rating" name="rating" value="<%=book.rating%>" min="0" max="5" step="0.1">
+        <div class="rating-err error"></div>
+      </div>
 
+      <div class="form-group">
+        <label for="remarks">Remarks:</label>
+        <textarea id="remarks" name="remarks" rows="3"><%=book.remarks%></textarea>
+      </div>
 
-    <label for="totalPages">Rating (out of 5):</label>
-    <input type="number" id="rating" name="rating" value="<%=book.rating%>" min="0" max="5" >
-    <div class="rating error"></div>
-
-
-    <label for="remarks">Remarks:</label>
-    <textarea id="remarks" name="remarks" rows="3" ><%=book.remarks%></textarea>
-
-    <button type="submit">Update Details</button>
-  </form>
+      <div class="form-actions">
+        <button type="submit" class="btn submit-btn">Update Details</button>
+        <a href="/myLibrary" class="btn cancel-btn">Cancel</a>
+      </div>
+    </form>
+  </div>
 </section>
 
 <script>

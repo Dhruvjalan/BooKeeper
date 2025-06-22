@@ -1,44 +1,64 @@
 <%- include('partials/header'); -%>
 
 <section class="add-book">
-  <form>
-    <h2>Add New Book</h2>
+  <div class="container">
+    <form class="book-form">
+      <h2>Add New Book</h2>
 
-    <label for="title">Book Title:</label>
-    <input type="text" id="title" name="title" value="Enter book title" required>
+      <div class="form-group">
+        <label for="title">Book Title:</label>
+        <input type="text" id="title" name="title" placeholder="Enter book title" required>
+      </div>
 
-    <label for="author">Author:</label>
-    <input type="text" id="author" name="author" value="Enter author name" required>
+      <div class="form-group">
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" placeholder="Enter author name" required>
+      </div>
 
-    <label for="genre">Genre:</label>
-      <select id="genre" name="genre" required>
-      <option value="">Select genre</option>
-      <option value="Fiction">Fiction</option>
-      <option value="Non-Fiction">Non-Fiction</option>
-      <option value="Sci-Fi">Sci-Fi</option>
-      <option value="Fantasy">Fantasy</option>
-      <option value="History">History</option>
-      <option value="Biography">Biography</option>
-      <option value="Self-Improvement">Self-Improvement</option>
-      <option value="Other">Other</option>
-      </select>
+      <div class="form-group">
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genre" required>
+          <option value="" disabled selected>Select genre</option>
+          <option value="Fiction">Fiction</option>
+          <option value="Non-Fiction">Non-Fiction</option>
+          <option value="Sci-Fi">Sci-Fi</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="History">History</option>
+          <option value="Biography">Biography</option>
+          <option value="Self-Improvement">Self-Improvement</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
 
-    <label for="pagesRead">Pages Read:</label>
-    <input type="number" id="pagesRead" name="pagesRead" value="1" min="0"  required>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pagesRead">Pages Read:</label>
+          <input type="number" id="pagesRead" name="pagesRead" value="0" min="0" required>
+        </div>
 
-    <label for="totalPages">Total Pages:</label>
-    <input type="number" id="totalPages" name="totalPages" value="1" min="1" step="1" required>
+        <div class="form-group">
+          <label for="totalPages">Total Pages:</label>
+          <input type="number" id="totalPages" name="totalPages" value="1" min="1" required>
+        </div>
+      </div>
 
-    <label for="totalPages">Rating (out of 5):</label>
-    <input type="number" id="rating" name="rating" value="1" min="0" max="5" step="0.01">
+      <div class="form-group">
+        <label for="rating">Rating (out of 5):</label>
+        <input type="number" id="rating" name="rating" value="0" min="0" max="5" step="0.1" placeholder="0-5">
+      </div>
 
-    <label for="remarks">Remarks:</label>
-    <textarea id="remarks" name="remarks" rows="3" value="Optionalremarks"></textarea>
+      <div class="form-group">
+        <label for="remarks">Remarks:</label>
+        <textarea id="remarks" name="remarks" rows="3" placeholder="Optional remarks"></textarea>
+      </div>
 
-    <a href="/myLibrary"><button type="submit">Add Book</button></a>
-  </form>
+      <div class="form-actions">
+        <button type="submit" class="btn submit-btn">Add Book</button>
+        <a href="/myLibrary" class="btn cancel-btn">Cancel</a>
+      </div>
+    </form>
+  </div>
 </section>
-
 <script>
     const form = document.querySelector('form')
     const userId = "<%= user.id %>"
