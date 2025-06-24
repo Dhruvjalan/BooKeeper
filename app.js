@@ -15,9 +15,8 @@ app.use(checkUser)
 
 app.set('view engine', 'ejs')
 
-const dbURI = 'mongodb+srv://ed24b047:tb3HP1wJUglHDSGa@cluster0.i6uksdv.mongodb.net/node-auth?retryWrites=true&w=majority&tls=true'
 
-mongoose.connect(dbURI, {})
+mongoose.connect(process.env.dbURI, {})
   .then(() => app.listen(4000))
   .catch((err) => console.log(err))
 
