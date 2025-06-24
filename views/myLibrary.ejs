@@ -20,7 +20,7 @@
     </select>
     
 
-    <div class="custom-multiselect">
+  <div class='multiselect genre' id="genre-multiselect">
   <button type="button" onclick="toggleGenreDropdown()">Select Genre</button>
   <div id="genreDropdown" class="dropdown-content">
     <label><input type="checkbox" value="All" checked> All</label>
@@ -35,6 +35,17 @@
   </div>
 </div>
 
+<div class="multiselect collection" id="collection-multiselect">
+  <button type="button" onclick="toggleCollectionDropdown()">Select Collections</button>
+    <div id="collectionDropdown" class="dropdown-content">
+          <label><input type="checkbox" value="All" checked> All</label>
+
+  <% [...new Set(books.filter(book => book.collection).map(book => book.collection))].forEach(collection => { %>
+  <label><input type="checkbox" value="<%= collection %>" checked> <%= collection %></label>
+<% }); %>
+  </div>
+</div>
+
     <a href = '/add-book' class="btn addBook">Add Book</a>
     
   </section>
@@ -45,6 +56,7 @@
           <h1><%=book.title%></h1>
           <h3>By <%=book.author%></h3>
           <p >Genre: <span id = 'bookGenre'><%=book.genre%></span></p>
+          <p >Collection: <span id = 'bookCollection'><%=book.collection%></span></p>
           <p>Pages: <span><%=book.pagesRead%> / <%=book.totalPages%></span></p>
           <p>Rating: <span><%=book.rating%></span></p>
           <p>Remarks: <span><%=book.remarks%></span></p>
@@ -88,6 +100,11 @@ function toggleGenreDropdown() {
   dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block'
 }
 
+function toggleCollectionDropdown() {
+  const dropdown = document.getElementById('collectionDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
 const genreDropdown = document.getElementById('genreDropdown')
 genreDropdown.addEventListener('change', () => {
   const selectedGenres = Array.from(genreDropdown.querySelectorAll('input[type="checkbox"]'))
@@ -103,6 +120,23 @@ genreDropdown.addEventListener('change', () => {
     }
   })
 })
+
+const collectionDropdown = document.getElementById('collectionDropdown')
+collectionDropdown.addEventListener('change', () => {
+  const selectedCollections = Array.from(collectionDropdown.querySelectorAll('input[type="checkbox"]'))
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.value)
+
+  booksSection.forEach(book => {
+    const bookCollection = book.querySelector('#bookCollection').textContent
+    if (selectedCollections.includes('All') || selectedCollections.includes(bookCollection)) {
+      book.style.display = 'block'
+    } else {
+      book.style.display = 'none'
+    }
+  })
+})
+
 
 
     const bookSections = document.querySelectorAll(".book")

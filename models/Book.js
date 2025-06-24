@@ -18,9 +18,14 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  completionStatus: {
+  collection: {
     type: String,
     required: true
+  },
+  completionStatus: {
+    type: String,
+    required: true,
+    default: 'Uncategorized'
   },
   pagesRead: {
     type: Number,
@@ -32,7 +37,7 @@ const bookSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    min: 1,
+    min: 0,
     max: 5
   },
   remarks: {
@@ -48,7 +53,10 @@ bookSchema.statics.getUserBooks = async function(userId){
     throw Error ('You have no books added yet.')
 }
 
-
+bookSchema.statics.isBookThere = async function({ userId, title, author }) {
+    const book = await this.findOne({ userId, title, author })
+    return !!book
+}
 
 const Book = mongoose.model('Book', bookSchema)
 export default Book

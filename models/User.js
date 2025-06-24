@@ -50,7 +50,7 @@ userSchema.statics.login = async function (email, password) {
   throw Error('Looks like this email is not signed up with us. Sign in Now')
 }
 
-userSchema.statics.addBook = async function (userId, bookId, completion) {
+userSchema.statics.addBook = async function (userId,collection, bookId, completion) {
   const bookObjectId = new mongoose.Types.ObjectId(String(bookId))
   const crosscheck_user = await this.findById(userId)
   let user = crosscheck_user

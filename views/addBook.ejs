@@ -9,6 +9,8 @@
         <label for="title">Book Title:</label>
         <input type="text" id="title" name="title" placeholder="Enter book title" required>
       </div>
+      
+      <div class="duplicate error">NoError</div>
 
       <div class="form-group">
         <label for="author">Author:</label>
@@ -29,6 +31,24 @@
           <option value="Other">Other</option>
         </select>
       </div>
+
+<div class="form-group">
+  <label for="collection">Collection:</label>
+  <select id="collection" name="collection" required>
+    <option value="Uncategorized" selected>Uncategorized</option>
+    <% const uniqueCollections = []; %>
+    <% books.forEach(book => { %>
+      <% if (book.collection && !uniqueCollections.includes(book.collection)) { %>
+        <% uniqueCollections.push(book.collection); %>
+        <option value="<%= book.collection %>"><%= book.collection %></option>
+      <% } %>
+    <% }); %>
+    <option value="__new__">-- Add New Collection --</option>
+  </select>
+  <input type="text" id="new-collection" name="new-collection" class="new-collection-input" style="display: none;" placeholder="Enter new collection name">
+</div>
+
+
 
       <div class="form-row">
         <div class="form-group">
@@ -59,39 +79,85 @@
     </form>
   </div>
 </section>
+
 <script>
     const form = document.querySelector('form')
     const userId = "<%= user.id %>"
-    form.addEventListener('submit',async (e)=>{
-        e.preventDefault()
-        console.log("After Add Book")
-        const title = form.title.value
-        const author = form.author.value
-        const genre = form.genre.value
-        const pagesRead = form.pagesRead.value
-        const totalPages = form.totalPages.value
-        const rating = form.rating.value
-        const remarks = form.remarks.value
+    const duplicate_error = document.querySelector('.duplicate.error')
+    
+    document.getElementById('collection').addEventListener('change', function() {
+      const newCollectionInput = document.getElementById('new-collection');
+      if (this.value === '__new__') {
+        this.style.display = 'none';
+        newCollectionInput.style.display = 'block';
+        newCollectionInput.focus();
+      }
+    });
 
-        try{
-            const res = await fetch('/add-book', {
-                method: 'POST',
-                body: JSON.stringify({userId, title,author,genre,completionStatus: pagesRead*100/totalPages,pagesRead,totalPages, rating,remarks}),
-                headers: {'Content-Type':'application/json'}
-            })
-            const data = await res.json()
-            console.log("data",data)
-            
-            if(data.bookid){
-                  window.location.href = '/myLibrary'
+    document.getElementById('new-collection').addEventListener('blur', function() {
+      if (this.value.trim() === '') {
+        const collectionSelect = document.getElementById('collection');
+        collectionSelect.style.display = 'block';
+        this.style.display = 'none';
+        collectionSelect.value = '';
+      }
+    });
 
-            }
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const title = String(form.title.value);
+    const author = String(form.author.value);
+    const genre = String(form.genre.value);
+    const pagesRead = Number(form.pagesRead.value);
+    const totalPages = Number(form.totalPages.value);
+    const rating = Number(form.rating.value);
+    const remarks = String(form.remarks.value);
+    
+    let collection = form.collection.value;
+    if (collection === '__new__') {
+        collection = form['new-collection'].value.trim();
+        if (!collection) {
+            alert('Please enter a valid collection name');
+            return;
         }
-        catch(err){
-            console.log("Error found at views/addBook.ejs, line-69")
-            console.log(err)
-        }
-    })
+    }
+
+    try {
+  const res = await fetch('/add-book', {
+    method: 'POST',
+    body: JSON.stringify({
+      userId, 
+      title,
+      author,
+      genre,
+      collection, 
+      completionStatus: pagesRead * 100 / totalPages,
+      pagesRead,
+      totalPages,
+      rating, 
+      remarks
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  const data = await res.json();
+
+  if (data.duplicate_error) {
+    duplicate_error.textContent = data.duplicate_error;
+    duplicate_error.style.display = 'block';
+    return;
+  }
+
+  if (res.ok) {
+    window.location.href = '/myLibrary';
+  }
+} catch (err) {
+  console.error("Error:", err);
+}
+
+});
+
 </script>
 
 <%- include('partials/footer'); -%>

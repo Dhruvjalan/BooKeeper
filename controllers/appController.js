@@ -1,18 +1,26 @@
 import User from '../models/User.js'
 import Book from '../models/Book.js'
-// Book details object should have:
-// UserId, title ; author ; genre ; pagesRead; totalPages;completionStatus; rating ; remarks ;
+import mongoose from 'mongoose' ; 
+
 
 
 export async function add_book_post(req,res){
-    const {userId, title,author,genre,pagesRead,totalPages,completionStatus,rating,remarks} = req.body
+    const {userId, title,author,genre,collection,pagesRead,totalPages,completionStatus,rating,remarks} = req.body
     try {
-        const book = await Book.create({userId, title,author,genre,pagesRead,totalPages,completionStatus,rating,remarks})
+        const bookExists = await Book.isBookThere({userId, title,author})
+        console.log("Duplicate check for", { userId, title, author }, "=>", bookExists)
+
+        if(!bookExists){
+        const book = await Book.create({userId, title,author,genre,collection,pagesRead,totalPages,completionStatus,rating,remarks})
         
-        const user = await User.addBook(userId,book._id,completionStatus/100)
+        const user = await User.addBook(userId,collection,book._id,completionStatus/100)
         console.log("Printing user on appcontroller line 13, addbook",user)
 
         return res.status(201).json({ bookid: book._id })
+      }
+      console.log("Duplicate found. blocking")
+      return res.status(409).json({'duplicate_error':"BooKeeper doesn't allow ceation of duplicate books"})
+
     } catch (err) {
         console.log("error: ",err)
         res.status(400).json(err)
@@ -42,8 +50,7 @@ export async function delete_book(req,res){
 
 export async function update_book(req, res) {
   const { bookId } = req.params
-  const { userId, title, author, genre, pagesRead, totalPages, completionStatus, rating, remarks } = req.body
-
+  const { userId, title, author, genre,collection, pagesRead, totalPages, completionStatus, rating, remarks } = req.body
 
   
   try {
@@ -54,15 +61,16 @@ export async function update_book(req, res) {
         title,
         author,
         genre,
+        collection,
         pagesRead,
         totalPages,
         completionStatus,
         rating,
         remarks
       },
-      { new: true } // return the updated document
+      { new: true } 
     )
-    const user = await User.addBook(userId,bookId,completionStatus/100)
+    const user = await User.addBook(userId,collection,bookId,completionStatus/100)
 
 
     console.log("Printing user on appcontroller line 68, editbook",user)

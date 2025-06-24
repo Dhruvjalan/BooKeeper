@@ -1,14 +1,45 @@
 <%- include('partials/header'); -%>
 
-<header>
-  <div class="smoothie">
-  </div>
-  <div class="headings">
-    <h2>BooKeeper - Personal Library</h2>
-    <h3>By Book Nerds For Book Nerds</h3>
-    <a href="/myLibrary" class="btn">View My Books</a>
-  </div>
-</header>
+<main class="home-page">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Welcome to <span class="logo-text">BooKeeper</span></h1>
+        <p class="hero-subtitle">Your personal library management system</p>
+        <p class="hero-description">Track your reading progress, organize your collection, and discover new literary adventures</p>
+        <div class="hero-actions">
+          <a href="/myLibrary" class="btn primary-btn">View My Library</a>
+          <% if(!user) { %>
+            <a href="/signup" class="btn secondary-btn">Get Started</a>
+          <% } %>
+        </div>
+      </div>
+      
+    </div>
+  </section>
 
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">Why Choose BooKeeper?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Track Your Reading</h3>
+          <p>Monitor your progress and never lose your place again.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Rate & Review</h3>
+          <p>Record your thoughts and ratings for every book you read.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🗂️</div>
+          <h3>Organize</h3>
+          <p>Categorize by genre, status, or create your own custom collections.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
 <%- include('partials/footer'); -%>

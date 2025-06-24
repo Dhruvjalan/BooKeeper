@@ -20,6 +20,22 @@
         <input id="genre" name="genre" value="<%=book.genre%>" required readonly class="read-only">
       </div>
 
+      <div class="form-group">
+  <label for="collection">Collection:</label>
+  <select id="collection" name="collection" required>
+    <option value="Uncategorized" selected>Uncategorized</option>
+    <% const uniqueCollections = []; %>
+    <% books.forEach(book => { %>
+      <% if (book.collection && !uniqueCollections.includes(book.collection)) { %>
+        <% uniqueCollections.push(book.collection); %>
+        <option value="<%= book.collection %>"><%= book.collection %></option>
+      <% } %>
+    <% }); %>
+    <option value="__new__">-- Add New Collection --</option>
+  </select>
+  <input type="text" id="new-collection" name="new-collection" class="new-collection-input" style="display: none;" placeholder="Enter new collection name">
+</div>
+
       <div class="form-row">
         <div class="form-group">
           <label for="pagesRead">Pages Read:</label>
@@ -56,6 +72,27 @@
     const bookId = "<%=book._id%>"
     const form = document.querySelector('form')
     const userId = "<%= user.id %>"
+    console.log("HELOOO IN CONSOLE IN SCRIPT EDITBOOK")
+    console.log("Uid",userId)
+
+document.getElementById('collection').addEventListener('change', function() {
+      const newCollectionInput = document.getElementById('new-collection');
+      if (this.value === '__new__') {
+        this.style.display = 'none';
+        newCollectionInput.style.display = 'block';
+        newCollectionInput.focus();
+      }
+    });
+
+    document.getElementById('new-collection').addEventListener('blur', function() {
+      if (this.value.trim() === '') {
+        const collectionSelect = document.getElementById('collection');
+        collectionSelect.style.display = 'block';
+        this.style.display = 'none';
+        collectionSelect.value = '';
+      }
+    });
+
     form.addEventListener('submit',async (e)=>{
         e.preventDefault()
         console.log("After Add Book")
@@ -67,14 +104,24 @@
         const rating = form.rating.value
         const remarks = form.remarks.value
 
+        let collection = form.collection.value;
+    if (collection === '__new__') {
+        collection = form['new-collection'].value.trim();
+        if (!collection) {
+            alert('Please enter a valid collection name');
+            return;
+        }
+    }
+
         try {
   const res = await fetch(`/edit-book/${bookId}`, {
     method: 'PATCH',
     body: JSON.stringify({
-        userId: "<%=user.id%>",
+      userId: "<%=user.id%>",
       title,
       author,
       genre,
+      collection,
       pagesRead,
       totalPages,
       completionStatus: pagesRead * 100 / totalPages,
