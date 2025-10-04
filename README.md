@@ -4,6 +4,9 @@ BooKeeper is a personal book management web application that allows users to org
 
 ---
 
+## Demo Video:
+https://drive.google.com/file/d/10YZeUIy_76ojJPSfHXFsCF461xHBtmiF/view?usp=sharing
+
 ## Features
 
 - **Create Custom Collections**  
@@ -58,8 +61,5 @@ PORT=<your_desired_port_number>
 ```bash
 ../BooKeeper> nodemon app.js
 ```
-
-## Demo Video:
-https://drive.google.com/file/d/10YZeUIy_76ojJPSfHXFsCF461xHBtmiF/view?usp=sharing
 
 ## Github Repo:
